@@ -1,3 +1,6 @@
+### manual additions ###
+# OpenTagBot configuration file
+/opentagbot_config.ini
 
 # Created by https://www.gitignore.io/api/linux,intellij,python
 
