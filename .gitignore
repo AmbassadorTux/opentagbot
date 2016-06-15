@@ -1,6 +1,7 @@
 ### manual additions ###
 # OpenTagBot configuration file
 /opentagbot_config.ini
+/opentagbot_database.sqlite3
 
 # Created by https://www.gitignore.io/api/linux,intellij,python
 
