@@ -34,10 +34,12 @@ class OpenTagBot(telepot.Bot):
         db.close_database()
 
     def on_chat_message(self, msg):
-
         message = msg['text']
         words = message.split()
-        first_word = words[0].replace("@{botname}".format(botname=self.getMe()['username']), "")
+        first_word = words[0]
+        botname = "@{botname}".format(botname=self.getMe()['username'])
+        first_word = first_word.replace(botname, "")  # strip @botname
+        first_word = first_word.lower()
         if first_word in self.mycommands:
             self.call_associated_method(first_word, msg)
         if "@" not in message:
@@ -68,7 +70,7 @@ class OpenTagBot(telepot.Bot):
         )
 
     def command_register(self, msg):
-        sender = msg['chat']['id']
+        sender_chatid = msg['chat']['id']
         username = msg['from'].get('username', None)
         uid = msg['from']['id']
         type = msg['chat']['type']
@@ -77,7 +79,7 @@ class OpenTagBot(telepot.Bot):
             message = (
                 "Almost! Please send me a private message to do this: @{botname}"
             ).format(botname=self.getMe()['username'])
-        elif self.db.register_user(uid, sender, username):
+        elif self.db.register_user(uid, sender_chatid, username):
             message = (
                 'You are now registered as @{username}. '
                 'I will send you a message as soon as you are tagged somewhere - '
@@ -87,7 +89,7 @@ class OpenTagBot(telepot.Bot):
         else:
             message = 'Could not register you - have you set your @ nickname already?'
 
-        self.sendMessage(sender, message)
+        self.sendMessage(sender_chatid, message)
 
     def command_delete(self, msg):
         sender = msg['chat']['id']
