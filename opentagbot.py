@@ -48,7 +48,6 @@ class OpenTagBot(telepot.Bot):
             if word[0] != "@":
                 continue
             chat_id_mentioned = self.db.get_chat_id_for_handle(word[1:])
-            user_id_mentioned = self.db.get_user_id_for_chat_id(chat_id_mentioned)
             if chat_id_mentioned:
                 self.notify_user(chat_id_mentioned, msg)
 
@@ -236,7 +235,7 @@ class TagBotDatabase:
             return False
 
         c = self.db.cursor()
-        c.execute('SELECT chat_id FROM users WHERE handle = ? LIMIT 1', (handle,))
+        c.execute('SELECT chat_id FROM users WHERE handle = ? COLLATE NOCASE LIMIT 1', (handle,))
         row = c.fetchone()
         c.close()
         if row:
